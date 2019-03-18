@@ -1,14 +1,14 @@
 
 <hr class="mb-16">
 <h1 class="display-3">Welcome to Malaysia Fintech Association.</h1>
-<h5 class="display-4 font-italic text-muted">欢迎来到 IEC。</h5>
+<h5 class="display-4 font-italic text-muted">欢迎来到马来西亚Fintech协会。</h5>
 
 <hr class="mb-16">
 <hr class="mb-16">
 <p class="lead">
-    Here is where your <text class="text-danger">great</text> business idea, materialize with the correct investors. Expect the greatness soon, coming your way this new year!
+    Here is where your great <text class="text-danger">Fintech</text> idea, materialize with the correct audience. Expect the greatness soon!
 <br />
-    <text class="lead text-muted font-italic"><small>这是您的伟<text class="text-danger">大</text>商业理念，与正确的投资者实现。 期待伟大的快乐，迎接新的一年！</small></text>
+    <text class="lead font-italic text-muted">这就是您的<text class="text-danger">Fintech</text>理念，与正确的受众一起实现。 期待伟大的快乐！</small></text>
 </p>
 
 
@@ -19,13 +19,13 @@
     <p>
     Thank you for subscribing! Check your email <text id="txtEmail"></text> for subscription confirmation.
     <br />
-    <small class="font-italic text-muted">谢谢您的订阅！ 查看您的电子邮件 <text id="txtEmailCN"></text> 以确认订阅</small>
+    <small class="font-italic text-muted">谢谢您的订阅！ 查看您的电子邮件 <text id="txtEmailCN"></text></small><small class="font-italic text-muted"></small>以确认订阅</small>
     </p>
 </div>
 <div id="divSubscribe">
-    <p class="font-italic">Subscribe to our Newsletter to be notified of IEC next grand activity.
+    <p class="font-italic">Subscribe to our Newsletter to be notified of MFA next grand activity.
     <br />
-    <text class="font-italic text-muted"><small>订阅我们的时事通讯，获得IEC下一次盛大活动的通知。</small></text>
+    <text class="font-italic text-muted"><small>订阅我们的时事通讯，获得MFA下一次盛大活动的通知。</small></text>
     </p>
     <farm class="form">
         <div class="form-group mb-2">
@@ -39,4 +39,36 @@
 <script>
   console.log("Hello from "+window.location.pathname+window.location.search);  
 
+
+  function subscribe() {
+    let txtEmail = document.getElementById("txtEmail");
+    let txtEmailCN = document.getElementById("txtEmailCN");
+    let email = document.getElementById("email");
+    let divAlert = document.getElementById("divAlert");
+    let divSubscribe = document.getElementById("divSubscribe");
+
+    db.collection("subscribers/").doc(email.value)
+    .get().then(function(userDoc) {
+      if(userDoc.exists) {
+        console.log("User "+email.value+" exists!");
+      } else {
+        db.collection("subscribers/").doc(email.value)
+        .set({
+          emailVerified: false
+        }).then(function() {
+          console.log("Done saving new subscriber: "+email.value);
+        }).catch(function(e) {
+          console.log("Error saving data:",e);
+        })
+      }
+    }).catch(function(e) {
+      console.log("Error chekcing existing data:",e);
+    });
+
+    txtEmail.innerText = email.value;
+    txtEmailCN.innerText = email.value;
+    divAlert.classList.remove("invisible");
+    divSubscribe.classList.add("invisible");
+    setTimeout(function() {window.location.replace("http://localhost:8080")}, 5000);
+  }
 </script>
